@@ -1,0 +1,47 @@
+<div class="card card-outline card-primary">
+  <div class="card-header">Data Library
+    <button class="btn btn-xs bg-purple float-right">Add Library</button>
+  </div>
+  <div class="card-body">
+    <!-- <div class="row">
+      <div class="col-md-12" *ngFor="let rec of dataList">
+        <div class="callout callout-success" >
+          
+          <h5>{{ rec.name }}</h5>
+          <p>
+            Version : <span class="badge bg-primary">{{ rec.version }}</span> ,
+            No of schemas : <span class="badge bg-fuchsia">{{ rec.noofschemas }}</span>
+          </p>
+        </div>
+      </div>
+    </div> -->
+    <div class="row">
+      <div class="col-md-4" *ngFor="let rec of dataList">
+        <div class="card card-outline">
+          <!-- Add the bg color to the header using any of the bg-* classes -->
+          <div class="card-header bg-purple">
+            {{rec.name}}
+            <button class="btn btn-xs bg-light float-right">Open</button>
+          </div>
+          <div class="card-footer p-0">
+            <ul class="nav flex-column">
+              <li class="nav-item">
+                <a href="#" class="nav-link">
+                  Version <span class="float-right badge bg-primary">{{rec.version}}</span>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="#" class="nav-link">
+                  # of Schemas <span class="float-right badge bg-info">{{rec.noofschemas}} </span>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+   
+    
+   
+  </div>
+</div>

@@ -1,0 +1,259 @@
+<div class="card card-primary" style="height:91vh;">
+  <div class="card-header rule-header">Rule Designer
+    <div class="card-tools">
+      <button type="button" class="btn btn-tool" ngbTooltip="Save Rulebook"  (click)="saveRulebook();">
+        <i class="fas fa-save"></i>
+      </button>
+      <button type="button" class="btn btn-tool" data-card-widget="maximize">
+        <i class="fas fa-expand"></i>
+      </button>
+    </div>
+  </div>
+  <div class="card-body" style="padding:3px;">
+    <div class="row">
+      <div class="col-md-3">
+        <div class="card card-outline card-primary" style="height:87vh;">
+          <div class="card-header rule-header">
+            Schemas
+            <div class="card-tools">
+              <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                <i class="fas fa-minus"></i>
+              </button>
+            </div>
+          </div>
+          <div class="card-body" style="overflow:auto;padding: 5px;">
+            <input id="filter" class="form-control form-control-sm" #filter (keyup)="tree.treeModel.filterNodes(filter.value)" placeholder="filter attributes"/>
+            <tree-root #schemaTree [nodes]="nodes" [options]="options">
+              <ng-template #treeNodeTemplate let-node let-index="index">
+                <span style="font-size:12px;" *ngIf="node.data.isRoot" ngbTooltip="Root Schema"> <i class="fas fa-code-branch"></i> </span><span style="font-size:12px;margin-left:4px;" class="text-indigo">{{ node.data.name}}  </span> : <span class="text-danger" style="font-size:12px">{{node.data.type}} <span *ngIf="node.data.isList"> [] </span></span>
+                <!-- <p>{{node.data.path}}</p> -->
+            </ng-template>
+            </tree-root>
+          </div>
+          <!-- /.card-body -->
+        </div>
+      </div>
+      <div class="col-md-9" style="margin-left: -12px;">
+        <div class="card card-outline card-primary"  style="height:87vh;">
+          <div class="card-header rule-header">
+            <div class="row">
+              <div class="col-md-10">
+                <div style="display:flex"> 
+                  <div  style="margin-top:5px">Rule Book :</div>   
+                    <input class="form-control form-control-sm col-md-5" style="margin-left:15px;" [(ngModel)]="ruleBook.name"/>
+                </div>
+              </div>
+              <div style="margin-top:5px" class="col-md-2">
+                <button type="button" class="btn btn-tool float-right" (click)="addRule();" ngbTooltip="Add New Rule">
+                  <i class="fas fa-plus-circle"></i>
+                </button>
+                <button type="button" class="btn btn-tool float-right" (click)="generateDRL();" ngbTooltip="Show Code">
+                  <i class="fas fa-code"></i>
+                </button>
+                <button type="button" class="btn btn-tool float-right" (click)="switchtoBook();" ngbTooltip="Show Rulebook">
+                  <i class="fas fa-book"></i>
+                </button>
+              </div> 
+            </div>
+           
+            
+            
+          </div>
+          <div class="card-body" style="overflow: auto;padding:5px;">
+            <div class="col-md-12" [ngClass]="{'show' : showCode,'hide' : !showCode}">
+              <label class="label"> Generated Rule </label>
+              <div class="col-md-12" style="font-size:14px;">
+                   <pre ><code [highlight]="generatedDRL" ></code></pre>
+              </div>    
+            </div>
+            <!-- <div>
+              <input type="text" name="message" placeholder="Rule Book Name ..." class="form-control form-control-sm" [(ngModel)]="ruleBook.name">
+            </div> -->
+            <div [ngClass]="{'show' : !showCode,'hide' : showCode}">
+            <div class="row" id="rule" *ngFor="let rec of ruleBook.ruleList">
+              
+              <div class="col-md-12" *ngIf="rec.type == 'SpreadSheet'">
+                <div class="card">
+                  <div class="card-header rule-header bg-light">Decision Table
+                    <div class="card-tools">
+                      <button type="button" class="btn btn-tool" data-card-widget="collapse" ngbTooltip="Minimize" placement="left">
+                        <i class="fas fa-minus"></i>
+                      </button>
+                     </div>
+                  </div>
+                  <div class="card-body">
+                    <div class="col-md-12" id="{{rec.spreadsheetInfo?.id}}"></div>
+                  </div>
+                </div>
+               
+              </div>
+              <div class="col-md-12" *ngIf="rec.type == 'FreeForm'" >
+                <div class="card"  *ngFor="let rulerow of rec.rules">
+                 <div class="card-header rule-header bg-light">{{rulerow.name}}
+                  
+                   <div class="card-tools">
+                    <button type="button" class="btn btn-tool" (click)="convertToSpreadsheet(rulerow);" ngbTooltip="Convert to Decison Table" placement="bottom">
+                      <i class="far fa-file-excel"></i>
+                    </button>
+                    <button type="button" class="btn btn-tool" (click)="cloneRule(rulerow);" ngbTooltip="Clone Rule" placement="bottom">
+                      <i class="far fa-copy"></i>
+                    </button>
+                    <button type="button" class="btn btn-tool" (click)="deleteRule(rulerow)" ngbTooltip="Delete Rule" placement="bottom">
+                      <i class="fas fa-trash-alt"></i>
+                    </button>
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse" ngbTooltip="Minimize" placement="left">
+                      <i class="fas fa-minus"></i>
+                    </button>
+                   </div>
+                </div>
+                 <div class="card-body rule-body">
+                   <div class="row">
+                    <div class="card col-md-7 card-outline card-purple" style="margin-bottom:3px">
+                      <div class="card-header card-header-sm when-then-header">When</div>
+                      <div class="card-body" style="padding: 0.25rem;">
+                        <div class="row" *ngIf="rulerow.conditions.length == 0" style="text-align: center;">
+                             
+                             <div class="text-muted well well-sm shadow-none dragplaceholder col-md-12">
+                              Drag and Drop from Schema from left to add conditions.
+                             </div>
+                        </div>
+                        <div class="row" (treeDrop)="onTreeDrop($event,rulerow)" style="overflow: auto;padding: 10px;min-height: 20px;">
+                           <table class="table" style="font-size:12px;margin-bottom:0px">
+                             <tbody>
+                               <tr *ngFor="let cond of rulerow.conditions">
+                                 <td style="max-width:150px;"><div class="text-purple" sty><b>{{cond.lhs}}</b><span class="text-danger">  ( {{cond.droppedObjLHS.type}} )</span></div>
+                                   <div class="text-indigo" style="font-size: 10px;">({{cond.schemaPathLHS}})</div></td>
+                                 <td><select class="form-control form-control-sm" *ngIf="cond.droppedObjLHS.type == 'string'" [(ngModel)]="cond.operator">
+                                  <option value="==">equals</option>
+                                  <option value="!=">not equals</option>
+                                  <option value="in">in a list </option>
+                                  <option value="not in">not in a list </option>
+                                  <option value="contains">contains</option>
+                                  <option value="not contains">does not contain</option>
+                                  <option value="str[startsWith]">Starts With</option>
+                                  <option value="str[endsWith]">Ends With</option>
+                                  <option value="str[length]">length of string</option>
+
+                                 </select>
+                                 <select class="form-control form-control-sm" *ngIf="cond.droppedObjLHS.type == 'integer' || cond.droppedObjLHS.type == 'number' || cond.droppedObjLHS.type == 'date'" [(ngModel)]="cond.operator">
+                                  <option value="==">equals</option>
+                                  <option value=">=">>=</option>
+                                  <option value=">">></option>
+                                  <option value="<="> <= </option>
+                                  <option value="<"> < </option>
+                                  <option value="between"> between </option> 
+                              </select>
+                            </td>
+                              <td>
+                                <div style="display:flex" *ngIf="cond.rhsType == 'constant'">
+                                  <input class="form-control form-control-sm" type="text" [(ngModel)]="cond.rhs" *ngIf="cond.droppedObjLHS.type == 'string'" placeholder="text"/>
+                                  <input class="form-control form-control-sm" type="number" [(ngModel)]="cond.rhs" *ngIf="(cond.droppedObjLHS.type == 'integer' || cond.droppedObjLHS.type == 'number') && !(cond.operator == 'between')" placeholder="number"/>
+                                  <div style="display:flex" *ngIf="(cond.droppedObjLHS.type == 'integer' || cond.droppedObjLHS.type == 'number') && cond.operator == 'between'">
+                                    <input class="form-control form-control-sm" type="number"  placeholder="min"/>
+                                    <input class="form-control form-control-sm" type="number"  placeholder="max"/>
+                                  </div>
+                                  <input class="form-control form-control-sm" type="date"  [(ngModel)]="cond.rhs" *ngIf="cond.droppedObjLHS.type == 'date' && !(cond.operator == 'between')" placeholder="date"/>
+                                  <div style="display:flex" *ngIf="(cond.droppedObjLHS.type == 'date') && cond.operator == 'between'">
+                                    <input class="form-control form-control-sm" type="date"  placeholder="min"/>
+                                    <input class="form-control form-control-sm" type="date"  placeholder="max"/>
+                                  </div>
+
+                                 
+                                </div>
+                                <div *ngIf="cond.rhsType == 'variable'" (treeDrop)="onTreeDropRHS($event,cond)" style="display: flex;">
+                                    <p *ngIf="cond.droppedObjRHS === undefined">Drag and Drop elemeent from schema here </p>
+                                   <div *ngIf="cond.droppedObjRHS !== undefined">
+                                    <div class="text-purple" sty><b>{{cond.rhs}}</b><span class="text-danger">  ( {{cond.droppedObjRHS?.type}} )</span></div>
+                                    <div class="text-indigo" style="font-size: 10px;">({{cond.schemaPathRHS}})</div>
+                                  </div> 
+                                  
+                                </div>
+
+                                
+                                </td>
+                              <td style="min-width:100px;">  
+                                <button type="button" class="btn btn-primary btn-xs" ngbTooltip="Switch from constant to variable and viceversa" (click)="onRHSTypeSwitch(cond)" >
+                                  <i class="fas fa-exchange-alt"></i>
+                                </button>
+                              <button type="button" class="btn btn-danger btn-xs" style="margin-left:4px;" ngbTooltip="Delete Condition" (click)="deleteRuleCondition(rulerow,cond)">
+                                <i class="fas fa-trash-alt"></i>
+                              </button></td>
+                            </tr>
+                             </tbody>
+                           </table>
+                        </div>
+                      </div>
+                  </div>
+                  <div class="card col-md-5 card-outline card-warning" style="margin-bottom:3px">
+                    <div class="card-header card-header-sm when-then-header"> Then 
+                       <!-- <div class="card-tools">
+                        <button type="button" class="btn btn-tool" ngbTooltip="Add new Fact">
+                          <i class="fas fa-plus"></i>
+                        </button>
+                        <button type="button" class="btn btn-tool" ngbTooltip="Modify existing Fact">
+                          <i class="fas fa-edit"></i>
+                        </button>
+                        <button type="button" class="btn btn-tool" ngbTooltip="Delete Fact">
+                          <i class="fas fa-times"></i>
+                        </button>
+                       </div> -->
+                    </div>
+                    <div class="card-body" style="padding: 0.25rem;">
+                      <div class="row" *ngIf="rulerow.actions.length == 0" style="text-align: center;">
+                        <div class="text-muted well well-sm shadow-none dragplaceholder col-md-12">
+                          Drag and Drop from Schema from left to add actions.
+                         </div>
+                      </div>
+                        <div class="row ruleTable" (treeDrop)="onActionTreeDrop($event,rulerow)">
+                          <table class="table" style="font-size:12px;">
+                            <tbody>
+                              <tr *ngFor="let action of rulerow.actions">
+                                <td style="max-width:150px;"><div class="text-purple" sty><b>{{action.lhs}}</b><span class="text-danger">  ( {{action.droppedObjLHS?.type}} )</span></div>
+                                  <div class="text-indigo" style="font-size: 10px;">({{action.schemaPathLHS}})</div></td>
+                                  <td>
+                                    <div style="display:flex" *ngIf="action.rhsType == 'constant'">
+                                      <input class="form-control form-control-sm" [(ngModel)]="action.rhs" type="text" *ngIf="action.droppedObjLHS?.type == 'string'" placeholder="text"/>
+                                      <input class="form-control form-control-sm" [(ngModel)]="action.rhs" type="number" *ngIf="(action.droppedObjLHS?.type == 'integer' || action.droppedObjLHS?.type == 'number')" placeholder="number"/>
+                                      <input class="form-control form-control-sm" [(ngModel)]="action.rhs" type="date" *ngIf="action.droppedObjLHS?.type == 'date'" placeholder="date" />
+                                    </div>
+                                    <div *ngIf="action.rhsType == 'variable'" (treeDrop)="onTreeDropActionRHS($event,action)" style="display: flex;">
+                                        <p *ngIf="action.droppedObjRHS === undefined">Drag and Drop elemeent from schema here </p>
+                                       <div *ngIf="action.droppedObjRHS !== undefined"> 
+                                         
+                                        <div class="text-purple"> = <b>{{action.rhs}}</b><span class="text-danger">  ( {{action.droppedObjRHS?.type}} )</span></div>
+                                        <div class="text-indigo" style="font-size: 10px;">({{action.schemaPathRHS}})</div>
+                                      </div> 
+                                      
+                                    </div>
+    
+                                    
+                                    </td>
+                                  <td style="min-width:100px;">  
+                                    <button type="button" class="btn btn-primary btn-xs" ngbTooltip="Switch from constant to variable and viceversa" (click)="onRHSTypeSwitchAction(action)" >
+                                      <i class="fas fa-exchange-alt"></i>
+                                    </button>
+                                  <button type="button" class="btn btn-danger btn-xs" style="margin-left:4px;" ngbTooltip="Delete Action" (click)="deleteRuleAction(rulerow,action)">
+                                    <i class="fas fa-trash-alt"></i>
+                                  </button></td>  
+                              </tr>
+                            </tbody>
+                          </table>         
+                        </div>  
+                      
+                    </div>
+                </div>
+                   </div>
+                      
+                 </div>
+                </div>
+              </div>
+                
+
+            </div>
+            </div>
+          </div>
+        </div>
+        </div>
+    </div>
+  </div>
+</div>

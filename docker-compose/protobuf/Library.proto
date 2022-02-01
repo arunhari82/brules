@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+message Library {
+
+    message Elements {
+        int32 nodeid = 1;
+        string name = 2;
+        string datatype = 3;
+        bool isList = 4;
+    }
+
+    message Schemas {
+        string name = 1;
+        string version = 2;
+        repeated Elements elements = 3;
+    }
+
+    required int32 id = 1;
+    required string name = 2;
+    required string version = 3;
+    optional int32 noofschemas = 4;
+    repeated Schemas schemas = 5;
+}

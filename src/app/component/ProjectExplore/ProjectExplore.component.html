@@ -1,0 +1,147 @@
+<div class="card card-outline card-primary">
+  <div class="card-header rule-header">
+     Project : <span class="badge bg-purple" style="font-size:12px;" *ngIf="project !== undefined">{{project.projectName}}</span>
+     <div class="card-tools">
+      <nav class="navbar navbar-expand navbar-default navbar-light">
+      <ul class="navbar-nav ml-auto">
+       
+        <!-- Messages Dropdown Menu -->
+        <li class="nav-item dropdown">
+          <a class="nav-link" data-toggle="dropdown" href="#" ngbTooltip="Schemas">
+            <i class="fas fa-atlas"></i>
+          </a>
+          <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+            <a  class="dropdown-item"  (click)="openImportSchema();">
+              <!-- Message Start -->
+              <div class="media">
+                
+                <div class="media-body">
+                  <h3 class="dropdown-item-title">
+                    Import Schemas
+                    <span class="float-right text-sm text-muted"><i class="fas fa-upload"></i></span>
+                  </h3>
+                  </div>
+              </div>
+              <!-- Message End -->
+            </a>
+
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" (click)="onAddNewSchema();">
+              <!-- Message Start -->
+              <div class="media">
+                
+                <div class="media-body">
+                  <h3 class="dropdown-item-title">
+                    Create New Schemas
+                    <span class="float-right text-sm text-muted"><i class="far fa-file-alt"></i></span>
+                  </h3>
+                  </div>
+              </div>
+              <!-- Message End -->
+            </a>
+            
+            <div class="dropdown-divider"></div>
+            
+          </div>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link" data-toggle="dropdown" href="#" ngbTooltip="Rules">
+            <i class="fab fa-gg"></i>
+          </a>
+          <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+            <a class="dropdown-item" (click)="onAddRuleBook()">
+              <!-- Message Start -->
+              <div class="media">
+                
+                <div class="media-body">
+                  <h3 class="dropdown-item-title">
+                    Add Rule Book
+                    <span class="float-right text-sm text-muted"><i class="fab fa-artstation"></i></span>
+                  </h3>
+                  </div>
+              </div>
+              <!-- Message End -->
+            </a>
+
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item">
+              <!-- Message Start -->
+              <div class="media">
+                
+                <div class="media-body">
+                  <h3 class="dropdown-item-title">
+                    Create DMN
+                    <span class="float-right text-sm text-muted"><i class="fas fa-bezier-curve"></i></span>
+                  </h3>
+                  </div>
+              </div>
+              <!-- Message End -->
+            </a>
+            
+            <div class="dropdown-divider"></div>
+            
+          </div>
+        </li>  
+        <li (click)="onProjectBuild();">
+          <a class="nav-link"  role="button" ngbTooltip="Build">
+            <i class="fas fa-hammer"></i>
+          </a>
+        </li>
+        <li>
+          <div style="display: flex;width:200px">
+           <label style="width:50px;margin-top:7px">Port : </label>
+           <input class="form-control form-control-sm" [(ngModel)]="portno" type="number"/>
+          </div>
+        </li>
+        <li (click)="onDeployProject();">
+          <a class="nav-link"  role="button" ngbTooltip="Deploy">
+             <i class="fas fa-play"></i>
+          </a>
+        </li>
+      </ul>
+      </nav> 
+     </div>
+  </div>
+  <div class="card-body">
+      <!--  {{ nodes | json}} -->
+       <div class="row">
+          <div class="col-md-12">
+           
+          </div>
+          <div class="col-md-2" >
+            <div class="card card-outline card-primary" style="height: 96vh;">
+                <div class="card-header rule-header">Project Explorer</div>
+                <div class="card-body">
+                  <tree-root #projectTree [nodes]="nodes" [options]="options" (activate)="onNodeSelect($event)" (updateData)="onUpdateData()">
+                    <ng-template #treeNodeTemplate let-node let-index="index">
+                      <span style="font-size:13px;margin-right:5px;" *ngIf="node.data.isRoot" ngbTooltip="Project" placement="bottom"> <i class="far fa-folder-open"></i> </span>
+                      <span style="font-size:13px;margin-right:5px;" *ngIf="node.data.type == 'Library'" ngbTooltip="Schema" placement="bottom"> <i class="fas fa-atlas"></i> </span>
+                      <span style="font-size:13px;margin-right:5px;" *ngIf="node.data.type == 'Schema'" ngbTooltip="Schema" placement="bottom"> <i class="fas fa-code-branch"></i> </span>
+                      
+                      <span style="font-size:13px;margin-right:5px;" *ngIf="node.data.type == 'Books'" ngbTooltip="Rulebooks" placement="bottom"> <i class="fab fa-artstation"></i> </span>
+                      <span style="font-size:13px;margin-right:5px;" *ngIf="node.data.type == 'DMN'" ngbTooltip="DMN" placement="bottom"> <i class="fas fa-bezier-curve"></i> </span>
+                      <span style="font-size:13px;margin-left:4px;" class="text-blue">{{ node.data.name}}</span>
+                      <!-- <p>{{node.data.path}}</p> -->
+                  </ng-template>
+                </tree-root>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-10" style="margin-left:-10px;">
+                <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-tabs" [destroyOnHide]="false">
+                  <li *ngFor="let editor of openedEditors" [ngbNavItem]="editor.id">
+                    <a ngbNavLink style="font-size:12px;">
+                      <span style="font-size:13px;margin-right:5px;" *ngIf="editor.selectedNode.type == 'Schema'"> <i class="fas fa-code-branch"></i> </span> {{ editor.id }}
+                      <span style="font-size:15px;" class="close position-relative pl-2 font-weight-light" (click)="close($event,editor)">×</span>
+                    </a>
+                    <ng-template ngbNavContent>
+                      <app-DataSchema *ngIf="editor.selectedNode.type == 'Schema'" [mode]="editor.mode" [editor]="editor" [libraryKey]="editor.selectedNode.name" (saveJsonObject)="onNewSaveModel($event)"></app-DataSchema>
+                      <app-RuleDesigner *ngIf="editor.selectedNode.type == 'Rulebook'" [mode]="editor.mode" [editor]="editor" (saveJsonObject)="onNewSaveRuleBook($event)"></app-RuleDesigner>
+                    </ng-template>
+                  </li>
+                </ul>
+                <div [ngbNavOutlet]="nav" class="mt-2"></div>
+          </div>
+       </div>
+  </div>
+</div>

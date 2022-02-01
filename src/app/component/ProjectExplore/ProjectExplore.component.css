@@ -1,0 +1,76 @@
+tr {
+    border-top: 0px !important;
+    /* border-bottom: 1px solid blue; */
+  }
+  
+  .card-header-sm {
+    padding: 5px;
+  }
+  
+  .btn-tool
+  {
+    color : gray
+  }
+  
+  .rule-header {
+    font-size: 12px;
+    padding: 7px;
+    font-weight: bold;
+    padding-left:20px;
+  }
+
+  .main-header {
+    font-size: 14px;
+    padding: 7px;
+    font-weight: bold;
+    padding-left:20px;
+  }
+  
+  .rule-body {
+    padding-bottom: 0px;
+    padding-top: 4px;
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+  
+  .when-then-header {
+    font-size: 12px;
+    text-align: center;
+    font-weight: bold;
+  }
+  
+  .dragplaceholder {
+    margin-top: 10px;
+    text-align: center;
+    font-size: 14px;
+  }
+  
+  .ruleTable {
+      overflow: auto;padding: 10px;min-height: 20px;
+  }
+  
+  .show
+  {
+    display:block;
+  }
+  
+  .hide
+  {
+    display: none;
+  }
+  
+  .jexcel_container
+  {
+    font-size:12px;
+  }
+  
+  .jexcel_header_background
+  {
+      background : #3f51b5;
+  }
+
+  nav 
+  {
+      padding : 0px;
+      background: none;
+  }

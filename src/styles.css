@@ -1,0 +1,26 @@
+/* You can add global styles to this file, and also import other style files */
+:root {
+    --jexcel_header_color: #eeeeee;
+    --jexcel_header_color_highlighted: #000;
+    --jexcel_header_background: #3f51b5;
+    --jexcel_header_background_highlighted: #dcdcdc;
+    --jexcel_content_color: #000;
+    --jexcel_content_color_highlighted: #000;
+    --jexcel_content_background: #fff;
+    --jexcel_content_background_highlighted: rgba(0,0,0,0.05);
+    --jexcel_menu_background: #fff;
+    --jexcel_menu_background_highlighted: #ebebeb;
+    --jexcel_menu_color: #795548;
+    --jexcel_menu_color_highlighted: #555;
+    --jexcel_menu_box_shadow: 2px 2px 2px 0px rgba(143, 144, 145, 1);
+    --jexcel_border_color: #00bcd4;
+    --jexcel_border_color_highlighted: #000;
+    --active_color: #f8bbd0;
+}
+
+.custom-header {
+    font-size: 12px;
+    padding: 7px;
+    font-weight: bold;
+    padding-left:20px;
+  }

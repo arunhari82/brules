@@ -1,0 +1,37 @@
+<div class="card card-outline card-primary">
+  <div class="card-header"> 
+    Projects
+    <button class="btn btn-sm btn-info float-right" type="button" (click)="createProject()">New Project</button>
+  </div>
+  <div class="card-body">
+    <div class="row">
+      <div class="col-md-4" *ngFor="let rec of projectList">
+        <div class="card card-outline">
+          <!-- Add the bg color to the header using any of the bg-* classes -->
+          <div class="card-header bg-purple">
+            {{rec.projectName}} 
+            <div class="card-tools">
+              <button class="btn btn-xs bg-light float-right" style="margin-left:10px;" [routerLink]="['/project',rec.projectName]" routerLinkActive="router-link-active" >Open</button>
+            </div>
+            
+
+          </div>
+          <div class="card-footer p-0">
+            <ul class="nav flex-column">
+              <li class="nav-item">
+                <a href="#" class="nav-link">
+                  Version <span class="float-right badge bg-primary">{{rec.version}}</span>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="#" class="nav-link">
+                  Description <span class="float-right badge bg-info">{{rec.projectDescription}} </span>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>  

@@ -1,0 +1,112 @@
+{
+    "meta": {
+        "limit": 100,
+        "offset": 0,
+        "total_count": 100
+    },
+    "objects": [
+        {
+            "caucus": null,
+            "congress_numbers": [
+                115,
+                116,
+                117
+            ],
+            "current": true,
+            "description": "Senior Senator for Idaho",
+            "district": null,
+            "enddate": "2023-01-03",
+            "extra": {
+                "address": "239 Dirksen Senate Office Building Washington DC 20510",
+                "contact_form": "https://www.crapo.senate.gov/contact",
+                "fax": "202-228-1375",
+                "office": "239 Dirksen Senate Office Building"
+            },
+            "leadership_title": null,
+            "party": "Republican",
+            "person": {
+                "bioguideid": "C000880",
+                "birthday": "1951-05-20",
+                "cspanid": 26440,
+                "firstname": "Michael",
+                "gender": "male",
+                "gender_label": "Male",
+                "lastname": "Crapo",
+                "link": "https://www.govtrack.us/congress/members/michael_crapo/300030",
+                "middlename": "D.",
+                "name": "Sen. Michael “Mike” Crapo [R-ID]",
+                "namemod": "",
+                "nickname": "Mike",
+                "osid": "N00006267",
+                "pvsid": "26830",
+                "sortname": "Crapo, Michael “Mike” (Sen.) [R-ID]",
+                "twitterid": "MikeCrapo",
+                "youtubeid": "senatorcrapo"
+            },
+            "phone": "202-224-6142",
+            "role_type": "senator",
+            "role_type_label": "Senator",
+            "senator_class": "class3",
+            "senator_class_label": "Class 3",
+            "senator_rank": "senior",
+            "senator_rank_label": "Senior",
+            "startdate": "2017-01-03",
+            "state": "ID",
+            "title": "Sen.",
+            "title_long": "Senator",
+            "website": "https://www.crapo.senate.gov"
+        },
+        {
+            "caucus": null,
+            "congress_numbers": [
+                115,
+                116,
+                117
+            ],
+            "current": true,
+            "description": "Senior Senator for Iowa",
+            "district": null,
+            "enddate": "2023-01-03",
+            "extra": {
+                "address": "135 Hart Senate Office Building Washington DC 20510",
+                "contact_form": "https://www.grassley.senate.gov/contact",
+                "fax": "202-224-6020",
+                "office": "135 Hart Senate Office Building",
+                "rss_url": "http://grassley.senate.gov/customcf/rss_feed.cfm"
+            },
+            "leadership_title": "President Pro Tempore of the Senate",
+            "party": "Republican",
+            "person": {
+                "bioguideid": "G000386",
+                "birthday": "1933-09-17",
+                "cspanid": 1167,
+                "firstname": "Charles",
+                "gender": "male",
+                "gender_label": "Male",
+                "lastname": "Grassley",
+                "link": "https://www.govtrack.us/congress/members/charles_grassley/300048",
+                "middlename": "E.",
+                "name": "Sen. Charles “Chuck” Grassley [R-IA]",
+                "namemod": "",
+                "nickname": "Chuck",
+                "osid": "N00001758",
+                "pvsid": "53293",
+                "sortname": "Grassley, Charles “Chuck” (Sen.) [R-IA]",
+                "twitterid": "ChuckGrassley",
+                "youtubeid": "senchuckgrassley"
+            },
+            "phone": "202-224-3744",
+            "role_type": "senator",
+            "role_type_label": "Senator",
+            "senator_class": "class3",
+            "senator_class_label": "Class 3",
+            "senator_rank": "senior",
+            "senator_rank_label": "Senior",
+            "startdate": "2017-01-03",
+            "state": "IA",
+            "title": "Sen.",
+            "title_long": "Senator",
+            "website": "https://www.grassley.senate.gov"
+        }
+    ]
+}
