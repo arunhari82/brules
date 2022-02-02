@@ -539,7 +539,7 @@ else
       }
 
       let str : string = action.droppedObjLHS? action.droppedObjLHS.path.toLowerCase() : "";
-      let output = "$"+str.substring(str.indexOf(foundBindVar.bindVariable),str.length);
+      let output = "$"+str.substring(str.indexOf("\."+foundBindVar.bindVariable) + 1,str.length);
       let outputObjArray  = output.split(".");
       let actionPath : string = "";
       outputObjArray.forEach((outputPath : string,index : number) => {

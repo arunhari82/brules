@@ -13,7 +13,7 @@ import { Subject } from 'rxjs';
   styleUrls: ['./ProjectExplore.component.css']
 })
 export class ProjectExploreComponent implements OnInit {
-
+  isLoading : boolean = false;
   rulebookPrefix: string = "RB";
   rulebookIndex: number = 1;
   schemaPrefix: string = "Sch";
@@ -326,11 +326,13 @@ export class ProjectExploreComponent implements OnInit {
   //Project Build/Deploy
   onProjectBuild()
   {
+    this.isLoading = true;
     // window.alert("on Project build");
     let subject : Subject<object>  =  this.service.buildProjectRequest(this.project);
     subject.subscribe({
       next : (data : any) => {
         console.log(data);
+        this.isLoading = false;
       }
     })
      
@@ -338,7 +340,9 @@ export class ProjectExploreComponent implements OnInit {
 
   onDeployProject()
   {
+    this.isLoading = true;
      this.service.deployProject(this.project,this.portno).subscribe((data : any) => {
+      this.isLoading = false;
       let url = "http://localhost:"+this.portno+"/q/swagger-ui";
       console.log(url);
       window.open(url, "",'fullscreen=no');

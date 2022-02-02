@@ -103,10 +103,11 @@
      </div>
   </div>
   <div class="card-body">
+    
       <!--  {{ nodes | json}} -->
        <div class="row">
           <div class="col-md-12">
-           
+            
           </div>
           <div class="col-md-2" >
             <div class="card card-outline card-primary" style="height: 96vh;">
@@ -128,6 +129,7 @@
             </div>
           </div>
           <div class="col-md-10" style="margin-left:-10px;">
+            <div class="loader" *ngIf="isLoading">Loading...</div>
                 <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-tabs" [destroyOnHide]="false">
                   <li *ngFor="let editor of openedEditors" [ngbNavItem]="editor.id">
                     <a ngbNavLink style="font-size:12px;">
