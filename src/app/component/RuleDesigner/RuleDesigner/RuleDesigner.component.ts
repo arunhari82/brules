@@ -539,7 +539,7 @@ else
       }
 
       let str : string = action.droppedObjLHS? action.droppedObjLHS.path.toLowerCase() : "";
-      let output = "$"+str.substring(str.indexOf("\."+foundBindVar.bindVariable) + 1,str.length);
+      let output = "$"+str.substring(str.indexOf("\."+foundBindVar.bindVariable+"\.") + 1,str.length);
       let outputObjArray  = output.split(".");
       let actionPath : string = "";
       outputObjArray.forEach((outputPath : string,index : number) => {
@@ -656,7 +656,7 @@ else
                            let rulePathSplits = ruleCondition.rhs?.split("/");
                            if(rulePathSplits != null)
                            {
-                              let rhsPath = "$"+rulePathSplits[rulePathSplits.length - 2]+"."+rulePathSplits[rulePathSplits.length - 1]
+                              let rhsPath = "$"+rulePathSplits[rulePathSplits.length - 2].toLowerCase()+"."+rulePathSplits[rulePathSplits.length - 1]
                               condition = condition + " " + rhsPath + "";
                            }
                            
@@ -686,7 +686,7 @@ else
                 str = "$" + data.toLowerCase() + " : " ;
                 let path : string = ruleCondition.droppedObjLHS.path;
                 let datatypePath : string = ruleCondition.droppedObjLHS.datatypePath;
-                let output  = path.substring(0,path.indexOf(data) + data.length).toLowerCase().replaceAll("\.","/");
+                let output  = path.substring(0,path.indexOf("\."+data+"\.") + data.length+1).toLowerCase().replaceAll("\.","/");
                 let outputvars =  output.split("/");
                 let condition : string = "";
                 outputvars.forEach((outputpath : string,dataindex : number)=>{
@@ -708,7 +708,7 @@ else
                                 let rulePathSplits = ruleCondition.schemaPathRHS?.split("/");
                                 if(rulePathSplits != null)
                                 {
-                                    let rhsPath = "$"+rulePathSplits[rulePathSplits.length - 2]+"."+rulePathSplits[rulePathSplits.length - 1]
+                                    let rhsPath = "$"+rulePathSplits[rulePathSplits.length - 2].toLowerCase()+"."+rulePathSplits[rulePathSplits.length - 1]
                                     condition = condition + " " + rhsPath + "";
                                 }
                           }
@@ -729,7 +729,7 @@ else
               let drlpath : string = "";
               let path : string = ruleCondition.droppedObjLHS.path;
               let datatypePath : string = ruleCondition.droppedObjLHS.datatypePath;
-              let output  = path.substring(0,path.indexOf(data) + data.length).toLowerCase().replaceAll("\.","/");
+              let output  = path.substring(0,path.indexOf("\."+data+"\.") + data.length+1).toLowerCase().replaceAll("\.","/");
               let outputvars =  output.split("/");
               outputvars.forEach((outputpath : string,dataindex : number)=>{
                     if(dataindex == 0)

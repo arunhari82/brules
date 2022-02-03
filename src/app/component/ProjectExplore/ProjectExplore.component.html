@@ -129,7 +129,11 @@
             </div>
           </div>
           <div class="col-md-10" style="margin-left:-10px;">
-            <div class="loader" *ngIf="isLoading">Loading...</div>
+                <div *ngIf="isLoading">
+                  <div class="loader" >Loading...</div>
+                  <p class="text-purple" style="text-align: center;">{{loadingText}}</p>
+                </div>
+                
                 <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-tabs" [destroyOnHide]="false">
                   <li *ngFor="let editor of openedEditors" [ngbNavItem]="editor.id">
                     <a ngbNavLink style="font-size:12px;">

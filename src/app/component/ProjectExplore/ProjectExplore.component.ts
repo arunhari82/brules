@@ -14,11 +14,13 @@ import { Subject } from 'rxjs';
 })
 export class ProjectExploreComponent implements OnInit {
   isLoading : boolean = false;
+  loadingText : string = "";
   rulebookPrefix: string = "RB";
   rulebookIndex: number = 1;
   schemaPrefix: string = "Sch";
   schemaIndex: number = 1;
   portno : number = 9091;
+  
 
   projectId!: string;
   service!: DBServiceService;
@@ -327,6 +329,7 @@ export class ProjectExploreComponent implements OnInit {
   onProjectBuild()
   {
     this.isLoading = true;
+    this.loadingText = "Building Project";
     // window.alert("on Project build");
     let subject : Subject<object>  =  this.service.buildProjectRequest(this.project);
     subject.subscribe({
@@ -341,6 +344,7 @@ export class ProjectExploreComponent implements OnInit {
   onDeployProject()
   {
     this.isLoading = true;
+    this.loadingText = "Deploying Project on port " + this.portno;
      this.service.deployProject(this.project,this.portno).subscribe((data : any) => {
       this.isLoading = false;
       let url = "http://localhost:"+this.portno+"/q/swagger-ui";
