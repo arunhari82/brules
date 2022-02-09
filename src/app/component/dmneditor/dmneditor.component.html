@@ -1,0 +1,33 @@
+<div class="card card-primary">
+  <div class="card-header rule-header">DMN Editor
+    <div class="card-tools">
+      <button type="button" class="btn btn-tool" ngbTooltip="Save DMN">
+        <i class="fas fa-save"></i>
+      </button>
+      <button type="button" class="btn btn-tool" ngbTooltip="Download as SVG">
+        <i class="fas fa-image"></i>
+      </button>
+      <button type="button" class="btn btn-tool" ngbTooltip="Undo">
+        <i class="fas fa-undo"></i>
+      </button>
+      <button type="button" class="btn btn-tool" ngbTooltip="Redo">
+        <i class="fas fa-redo"></i>
+      </button>
+      <button type="button" class="btn btn-tool" data-card-widget="maximize">
+        <i class="fas fa-expand"></i>
+      </button>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="row">
+      <div class="col-md-12">
+        <div *ngIf="isLoading">
+          <div class="loader" >Loading...</div>
+          <p class="text-purple" style="text-align: center;">{{loadingText}}</p>
+        </div>
+        <div id="bpmn-editor{{editor.id}}" style="height:800px"></div>
+    </div>
+
+    </div>
+  </div>
+</div>

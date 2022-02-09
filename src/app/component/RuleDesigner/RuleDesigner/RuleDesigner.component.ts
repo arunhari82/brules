@@ -341,7 +341,11 @@ else
     {
        this.service.getRuleBook(this.editor.id).subscribe((data : any)=>{
             this.ruleBook = <RuleBook>data;
+            this.ruleBook.ruleList?.forEach((ruleWrapper : RuleWrapper) => {
+               this.ruleindex = ruleWrapper.rules? ruleWrapper.rules?.length + 1: 0;
+           });
        });
+      
     }
     this.service.fetchLibraryList().subscribe((data : any) => {
       if(data instanceof Array)
@@ -472,7 +476,7 @@ else
   {
       let str = "";
       this.queryString.forEach((query : string,index : number) => {
-        str = str + "query executeRules" + (index + 1) + "\n";
+        str = str + "query execute"+this.ruleBook.name + (index + 1) + "\n";
         str = str + "\t" + query + "\n";
         str = str + "end \n";
       });
@@ -489,7 +493,7 @@ else
     this.ruleBook.ruleList?.forEach((rule : RuleWrapper) => {
       rule.rules?.forEach((rule : Rule) => {
         let ruleArray : Array<DRLConditionObject> = [];
-        let ruleStr = 'rule "' + rule.name + '" \nwhen\n';
+        let ruleStr = 'rule "' + this.ruleBook.name+"_"+rule.name + '" \nwhen\n';
         rule.conditions.forEach((cond : RuleCondition,ruleIndex : number) => {
             let condtionarray : Array<DRLConditionObject> = this.convertConditiontoDRLSyntax(cond);
             ruleArray = ruleArray.concat(condtionarray);
@@ -538,7 +542,7 @@ else
           break;
       }
 
-      let str : string = action.droppedObjLHS? action.droppedObjLHS.path.toLowerCase() : "";
+      let str : string = action.droppedObjLHS? action.droppedObjLHS.path : "";
       let output = "$"+str.substring(str.indexOf("\."+foundBindVar.bindVariable+"\.") + 1,str.length);
       let outputObjArray  = output.split(".");
       let actionPath : string = "";
@@ -553,7 +557,7 @@ else
           }
           else if(index == 0)
           {
-             actionPath = outputPath;
+             actionPath = outputPath.toLowerCase();
           }
           else
           {
@@ -623,6 +627,49 @@ else
        });
        return dedupedProcessedDrlCondition;
   }
+  
+  private convertDroppedRHS (ruleCondition : RuleCondition) : DRLConditionObject
+  {
+    let object! : DRLConditionObject;
+    let pathArray : Array<string> = [];
+    pathArray = ruleCondition.schemaPathRHS ? ruleCondition.schemaPathRHS?.split("/") : [];
+    pathArray.forEach((data : string,index : number)=>{
+        let str = "";
+        if(index == 0)
+        {
+             object = {
+              bindVariable :  "$"+data.toLowerCase(),
+              conditionString : "",
+              path : "/"+data.toLowerCase()
+            }
+        }
+        else if(index == pathArray.length-2)
+        {
+          let drlpath : string = "";
+          let path : string = ruleCondition.droppedObjRHS? ruleCondition.droppedObjRHS.path : "";
+          let datatypePath : string = ruleCondition.droppedObjRHS? ruleCondition.droppedObjRHS.datatypePath : "";
+          let output  = path.substring(0,path.indexOf("\."+data+"\.") + data.length+1).replaceAll("\.","/");
+          let outputvars =  output.split("/");
+          outputvars.forEach((outputpath : string,dataindex : number)=>{
+                if(dataindex == 0)
+                   drlpath = "/"  + outputpath+"[this == $"+outputpath+"]";
+                else if(dataindex == outputvars.length - 1)
+                   drlpath = drlpath + "/" + outputpath + "#"+datatypePath.split(".")[dataindex].split("=")[0];
+                else
+                   drlpath = drlpath + "/" + outputpath;
+          });
+          object = {
+            bindVariable : "$" + data.toLowerCase(),
+            conditionString : "",
+            path : drlpath
+          }
+        }
+
+        
+        
+    });
+    return object;
+  }
 
   private convertConditiontoDRLSyntax(ruleCondition : RuleCondition) : DRLConditionObject[]
   {
@@ -653,11 +700,27 @@ else
                        }
                        else
                        {
-                           let rulePathSplits = ruleCondition.rhs?.split("/");
+                           let rulePathSplits = ruleCondition.schemaPathRHS?.split("/");
                            if(rulePathSplits != null)
                            {
+                            if(rulePathSplits.length > 1) 
+                            {
                               let rhsPath = "$"+rulePathSplits[rulePathSplits.length - 2].toLowerCase()+"."+rulePathSplits[rulePathSplits.length - 1]
+                             /*  let rhsbindObject : DRLConditionObject = {
+                                bindVariable :  "$"+rulePathSplits[rulePathSplits.length - 2].toLowerCase(),
+                                conditionString : "",
+                                path : "RHSBindVariable"
+                              }
+                              strArray.push(rhsbindObject); */
+                              let rhsBindObject = this.convertDroppedRHS(ruleCondition);
+                              strArray.push(rhsBindObject);
                               condition = condition + " " + rhsPath + "";
+                            }
+                            if(rulePathSplits.length == 1) 
+                            {
+                              let rhsPath = rulePathSplits[0];
+                              condition = condition + " " + rhsPath + "";
+                            }
                            }
                            
                        }
@@ -686,12 +749,12 @@ else
                 str = "$" + data.toLowerCase() + " : " ;
                 let path : string = ruleCondition.droppedObjLHS.path;
                 let datatypePath : string = ruleCondition.droppedObjLHS.datatypePath;
-                let output  = path.substring(0,path.indexOf("\."+data+"\.") + data.length+1).toLowerCase().replaceAll("\.","/");
+                let output  = path.substring(0,path.indexOf("\."+data+"\.") + data.length+1).replaceAll("\.","/");
                 let outputvars =  output.split("/");
                 let condition : string = "";
                 outputvars.forEach((outputpath : string,dataindex : number)=>{
                       if(dataindex == 0)
-                        drlpath = "/"  + outputpath+"[this == $"+outputpath+"]"
+                        drlpath = "/"  + outputpath.toLowerCase()+"[this == $"+outputpath.toLowerCase()+"]"
                       else if(dataindex == outputvars.length - 1)
                         {
                           drlpath = drlpath + "/" + outputpath + "#"+datatypePath.split(".")[dataindex].split("=")[0];
@@ -708,8 +771,18 @@ else
                                 let rulePathSplits = ruleCondition.schemaPathRHS?.split("/");
                                 if(rulePathSplits != null)
                                 {
+                                  if(rulePathSplits.length > 1) 
+                                  {
                                     let rhsPath = "$"+rulePathSplits[rulePathSplits.length - 2].toLowerCase()+"."+rulePathSplits[rulePathSplits.length - 1]
+                                    let rhsBindObject = this.convertDroppedRHS(ruleCondition);
+                                    strArray.push(rhsBindObject);
                                     condition = condition + " " + rhsPath + "";
+                                  }
+                                  if(rulePathSplits.length == 1) 
+                                  {
+                                    let rhsPath = rulePathSplits[0];
+                                    condition = condition + " " + rhsPath + "";
+                                  }
                                 }
                           }
                         }
@@ -729,15 +802,15 @@ else
               let drlpath : string = "";
               let path : string = ruleCondition.droppedObjLHS.path;
               let datatypePath : string = ruleCondition.droppedObjLHS.datatypePath;
-              let output  = path.substring(0,path.indexOf("\."+data+"\.") + data.length+1).toLowerCase().replaceAll("\.","/");
+              let output  = path.substring(0,path.indexOf("\."+data+"\.") + data.length+1).replaceAll("\.","/");
               let outputvars =  output.split("/");
               outputvars.forEach((outputpath : string,dataindex : number)=>{
                     if(dataindex == 0)
-                       drlpath = "/"  + outputpath+"[this == $"+outputpath+"]";
+                       drlpath = "/"  + outputpath.toLowerCase()+"[this == $"+outputpath.toLowerCase()+"]";
                     else if(dataindex == outputvars.length - 1)
-                       drlpath = drlpath + "/" + outputpath + "#"+datatypePath.split(".")[dataindex].split("=")[0];
+                       drlpath = drlpath + "/" + outputpath.toLowerCase() + "#"+datatypePath.split(".")[dataindex].split("=")[0];
                     else
-                       drlpath = drlpath + "/" + outputpath;
+                       drlpath = drlpath + "/" + outputpath.toLowerCase();
               });
               let object : DRLConditionObject = {
                 bindVariable : "$" + data.toLowerCase(),

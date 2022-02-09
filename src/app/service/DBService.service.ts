@@ -221,4 +221,33 @@ export class DBServiceService {
     return this.http.post(url,postData,{ headers });
   }
 
+
+   generateDMN(project : Project) : Subject<any>
+   {
+    let subject = new Subject<object>();
+     let postData = {
+      libraryList : new Array<ModelLibrary>()
+     };
+     let fetchRequest : Array<any> = [];
+     project.schemas?.forEach((data : string) => {
+      fetchRequest.push(this.getLibrary(data).pipe(tap(res => console.log(res))));
+     });
+     forkJoin(fetchRequest).subscribe((allResult :any) => {
+        allResult.forEach((data : any) => {
+            let library = <ModelLibrary> data;
+            postData.libraryList.push(library);
+        });
+          let url = this.bruleServiveURL + "DMN/importSchemas";
+          const headers = {
+            'Content-Type': 'application/json',
+            'X-Custom' : 'bruleServices'
+          };
+          this.http.post(url,postData,{ headers }).subscribe((dmnresult : any) => {
+              subject.next(dmnresult);
+          });
+          
+     });
+     return subject;
+   }
+
 }

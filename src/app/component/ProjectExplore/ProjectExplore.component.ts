@@ -17,6 +17,8 @@ export class ProjectExploreComponent implements OnInit {
   loadingText : string = "";
   rulebookPrefix: string = "RB";
   rulebookIndex: number = 1;
+  dmnPrefix: string = "DMN";
+  dmnIndex: number = 1;
   schemaPrefix: string = "Sch";
   schemaIndex: number = 1;
   portno : number = 9091;
@@ -62,6 +64,24 @@ export class ProjectExploreComponent implements OnInit {
 
   add(event: MouseEvent) {
 
+  }
+
+  onAddDMN()
+  {
+    let editor: Editor = {
+      id: "Untitled" + this.dmnPrefix + " - " + this.dmnIndex,
+      mode: "new",
+      selectedNode: {
+        children: [],
+        isRoot: true,
+        name: "Untitled",
+        type: "DMN"
+      }
+    }
+
+    this.openedEditors.push(editor);
+    this.active = editor.id;
+    this.dmnIndex++;
   }
 
   onAddRuleBook() {
@@ -234,7 +254,8 @@ export class ProjectExploreComponent implements OnInit {
     let library: ModelLibrary = <ModelLibrary>$event.result;
     let editor: Editor = <Editor>$event.editor;
     editor.id = library.name;
-    this.addSchematoDataModel(library);
+    if(!this.checkSchemaAlreadyExists(library.name))
+       this.addSchematoDataModel(library);
     this.updateProject();
     /* this.closeTab(this.active);
     this.openTabSchema(library);
@@ -255,6 +276,20 @@ export class ProjectExploreComponent implements OnInit {
     this.updateProject();
   }
 
+
+  private checkSchemaAlreadyExists(schemaName : string) : boolean
+  {
+       let schemaExists : boolean = false;
+       this.nodes[0].children.forEach((children: ProjectNodeData) => {
+          if (children.name == "DataModels") {
+              children.children.forEach((grandChild : ProjectNodeData) =>{
+                  if(grandChild.name == schemaName)
+                     schemaExists = true;
+              });
+          }
+       });
+       return schemaExists;
+  }
 
   private checkRuleBookAlreadyExists(rulebookName : string) : boolean
   {

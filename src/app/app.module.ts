@@ -22,6 +22,7 @@ import { RuleDesignerComponent } from './component/RuleDesigner/RuleDesigner/Rul
 import { ProjectExploreComponent } from './component/ProjectExplore/ProjectExplore.component';
 import { ImportSchemaComponent } from './component/Modals/ImportSchema/ImportSchema.component';
 import { SaveRulebookComponent } from './component/Modals/SaveRulebook/SaveRulebook.component';
+import { DmneditorComponent } from './component/dmneditor/dmneditor.component';
 
 @NgModule({
   declarations: [
@@ -35,7 +36,8 @@ import { SaveRulebookComponent } from './component/Modals/SaveRulebook/SaveRuleb
     CreateProjectComponent,
     ProjectExploreComponent,
     ImportSchemaComponent,
-    SaveRulebookComponent
+    SaveRulebookComponent,
+    DmneditorComponent
   ],
   imports: [
     BrowserModule,
