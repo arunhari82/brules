@@ -76,7 +76,7 @@ tr {
   }
 
 
-  .loader,
+.loader,
 .loader:before,
 .loader:after {
   background: #aa2eb2;

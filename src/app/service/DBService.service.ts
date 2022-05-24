@@ -11,7 +11,7 @@ import { tap } from "rxjs/operators";
 export class DBServiceService {
 
   infinispanDBBaseURL :  string = "http://localhost:11222/rest/v2/caches/";
-  bruleServiveURL : string = "http://localhost:9090/";
+  bruleServiveURL : string = "http://localhost:9092/";
 
   constructor(private http: HttpClient)
   {
