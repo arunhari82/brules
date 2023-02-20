@@ -22,9 +22,10 @@ steps:
     echo See https://aka.ms/yaml
   displayName: 'Run a multi-line script'
 
-- task: oc-cmd@3
+
+- task: OcConditionalCmd@3
   inputs:
     connectionType: 'OpenShift Connection Service'
-    openshiftService: 'Openshift Connection'
     cmd: 'oc new-project azure-demo'
-    ignoreFlag: true
+    condition: 'not_exists'
+    resource: 'azure-demo'
