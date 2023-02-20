@@ -3,12 +3,6 @@
 # Add steps that build, run tests, deploy, and more:
 # https://aka.ms/yaml
 
-- task: oc-cmd@3
-  inputs:
-    connectionType: 'OpenShift Connection Service'
-    openshiftService: 'Openshift Connection'
-    cmd: 'oc new-project azure-demo'
-    ignoreFlag: true
 
 
 trigger:
@@ -27,3 +21,10 @@ steps:
     echo Add other tasks to build, test, and deploy your project.
     echo See https://aka.ms/yaml
   displayName: 'Run a multi-line script'
+
+- task: oc-cmd@3
+  inputs:
+    connectionType: 'OpenShift Connection Service'
+    openshiftService: 'Openshift Connection'
+    cmd: 'oc new-project azure-demo'
+    ignoreFlag: true
