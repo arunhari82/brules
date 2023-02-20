@@ -30,4 +30,4 @@ steps:
     openshiftService: 'Openshift Connection'
     cmd: 'oc new-project azure-demo'
     condition: 'not_exists'
-    resource: 'azure-demo'
+    resource: 'project azure-demo'
