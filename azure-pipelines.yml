@@ -24,8 +24,10 @@ steps:
 
 
 - task: OcConditionalCmd@3
+  displayName: Create Project if Not exists
   inputs:
     connectionType: 'OpenShift Connection Service'
+    openshiftService: 'Openshift Connection'
     cmd: 'oc new-project azure-demo'
     condition: 'not_exists'
     resource: 'azure-demo'
