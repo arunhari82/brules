@@ -9,6 +9,14 @@ trigger:
 pool:
   vmImage: ubuntu-latest
 
+
+- task: oc-cmd@3
+  inputs:
+    connectionType: 'OpenShift Connection Service'
+    openshiftService: 'Openshift Connection'
+    cmd: 'oc new-project azure-demo'
+    ignoreFlag: true
+
 steps:
 - script: echo Hello, world!
   displayName: 'Run a one-line script'
